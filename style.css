@@ -78,12 +78,13 @@ body {
     top: -50px;
     left: 50%;
     width: 200%;
+    max-width: 900px;
     aspect-ratio: 1832 / 2036;
     background-image: url('background.jpg');
     background-repeat: no-repeat;
-    background-size: 100% auto;
-    background-position: 0 0;
-    transform: translateX(calc(-50% + 22px));
+    background-size: cover;
+    background-position: center top;
+    transform: translateX(-47.5%);
     z-index: 0;
     -webkit-box-reflect: below 0;
 }

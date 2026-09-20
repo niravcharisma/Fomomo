@@ -83,7 +83,7 @@ body {
     background-image: url('background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center top;
+    background-position: 52% top;
     transform: translateX(-47.5%);
     z-index: 0;
     -webkit-box-reflect: below 0;

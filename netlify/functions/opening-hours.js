@@ -10,42 +10,47 @@ exports.handler = async function handler() {
         };
     }
 
-    try {
-        const response = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
-            headers: {
-                "X-Goog-Api-Key": apiKey,
-                "X-Goog-FieldMask": "currentOpeningHours.openNow"
-            }
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-            return {
-                statusCode: 502,
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    error: "Google Places request failed",
-                    googleStatus: data.error?.status || `HTTP_${response.status}`,
-                    details: data.error?.message || "Google returned no additional details"
-                })
-            };
+try {
+    const response = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
+        method: "GET",
+        headers: {
+            "X-Goog-Api-Key": apiKey,
+            "X-Goog-FieldMask": "displayName,currentOpeningHours,regularOpeningHours"
         }
+    });
+    
+    const data = await response.json();
 
+    if (!response.ok) {
         return {
-            statusCode: 200,
-            headers: {
-                "Content-Type": "application/json",
-                "Cache-Control": "public, max-age=300"
-            },
+            statusCode: 502,
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                openNow: data.currentOpeningHours?.openNow ?? false
+                error: "Google Places request failed",
+                googleStatus: data.error?.status || `HTTP_${response.status}`,
+                details: data.error?.message || "Google returned no additional details"
             })
         };
-    } catch {
-        return {
-            statusCode: 500,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ error: "Opening-hours service failed" })
-        };
     }
-};
+
+    return {
+        statusCode: 200,
+        headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "public, max-age=300"
+        },
+        body: JSON.stringify({
+            openNow: data.currentOpeningHours?.openNow ?? false
+        })
+    };
+} catch (error) {
+    return {
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            error: "Opening-hours service failed",
+            details: error instanceof Error ? error.message : String(error)
+        })
+    };
+}
+

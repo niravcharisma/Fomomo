@@ -10,24 +10,23 @@ exports.handler = async function handler() {
         };
     }
 
-    const query = new URLSearchParams({
-        place_id: placeId,
-        fields: "opening_hours",
-        key: apiKey
-    });
-
     try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?${query}`);
+        const response = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
+            headers: {
+                "X-Goog-Api-Key": apiKey,
+                "X-Goog-FieldMask": "currentOpeningHours.openNow"
+            }
+        });
         const data = await response.json();
 
-        if (!response.ok || data.status !== "OK") {
+        if (!response.ok) {
             return {
                 statusCode: 502,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     error: "Google Places request failed",
-                    googleStatus: data.status || "HTTP_ERROR",
-                    details: data.error_message || "Google returned no additional details"
+                    googleStatus: data.error?.status || `HTTP_${response.status}`,
+                    details: data.error?.message || "Google returned no additional details"
                 })
             };
         }
@@ -39,7 +38,7 @@ exports.handler = async function handler() {
                 "Cache-Control": "public, max-age=300"
             },
             body: JSON.stringify({
-                openNow: data.result?.opening_hours?.open_now ?? false
+                openNow: data.currentOpeningHours?.openNow ?? false
             })
         };
     } catch {

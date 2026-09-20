@@ -98,27 +98,7 @@ body {
     pointer-events: none;
 }
 
-#page-1 > *:not(.hero-background):not(.pixel-glow-layer) { position: relative; z-index: 3; }
-.pixel-glow-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: rgba(0, 0, 0, 0.44);
-}
-.pixel-glow-layer::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.12);
-}
-.background-light-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
+#page-1 > *:not(.hero-background) { position: relative; z-index: 3; }
 .logo-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 8px; transform: translateY(30px); }
 .brand-logo { width: 48%; max-width: 180px; height: auto; margin-bottom: 14px; filter: drop-shadow(0 0 24px rgba(255,255,255,1)) drop-shadow(0 0 24px rgba(255,255,255,0.95)); }
 .tagline-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; text-align: center; width: 100%; }

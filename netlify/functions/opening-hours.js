@@ -1,6 +1,6 @@
 exports.handler = async function handler() {
     const apiKey = process.env.GOOGLE_API_KEY;
-    const placeId = "ChIJ69-5-08RrjsR656yW4p3P2M";
+    const placeId = "ChIJozj_Jy8XrjsR31wcnvWqY2E";
 
     if (!apiKey) {
         return {
